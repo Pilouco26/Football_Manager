@@ -7,14 +7,34 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TableVirtuoso, TableComponents } from 'react-virtuoso';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { getFirestore, collection, query, orderBy } from 'firebase/firestore';
+import { initializeApp } from 'firebase/app';
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAUa8ASqRSE4H43_o2QfZtnArjHDVIrJJE",
+    authDomain: "football-63302.firebaseapp.com",
+    projectId: "football-63302",
+    storageBucket: "football-63302.appspot.com",
+    messagingSenderId: "774176377887",
+    appId: "1:774176377887:web:77edbd800ff203abe6d92a",
+    measurementId: "G-N5RNS6X4E0"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 interface Data {
-    calories: number;
-    carbs: number;
-    dessert: string;
-    fat: number;
-    id: number;
-    protein: number;
+    POS: number;
+    CLUB: string;
+    P: number;
+    W: number;
+    D: number;
+    L: number;
+    GF: number;
+    GA: number;
+    GD: string;
+    PTS: number;
 }
 
 interface ColumnData {
@@ -24,63 +44,18 @@ interface ColumnData {
     width: number;
 }
 
-type Sample = [string, number, number, number, number];
-
-const sample: readonly Sample[] = [
-    ['Frozen yoghurt', 159, 6.0, 24, 4.0],
-    ['Ice cream sandwich', 237, 9.0, 37, 4.3],
-    ['Eclair', 262, 16.0, 24, 6.0],
-    ['Cupcake', 305, 3.7, 67, 4.3],
-    ['Gingerbread', 356, 16.0, 49, 3.9],
-];
-
-function createData(
-    id: number,
-    dessert: string,
-    calories: number,
-    fat: number,
-    carbs: number,
-    protein: number,
-): Data {
-    return { id, dessert, calories, fat, carbs, protein };
-}
-
 const columns: ColumnData[] = [
-    {
-        width: 200,
-        label: 'Dessert',
-        dataKey: 'dessert',
-    },
-    {
-        width: 120,
-        label: 'Calories\u00A0(g)',
-        dataKey: 'calories',
-        numeric: true,
-    },
-    {
-        width: 120,
-        label: 'Fat\u00A0(g)',
-        dataKey: 'fat',
-        numeric: true,
-    },
-    {
-        width: 120,
-        label: 'Carbs\u00A0(g)',
-        dataKey: 'carbs',
-        numeric: true,
-    },
-    {
-        width: 120,
-        label: 'Protein\u00A0(g)',
-        dataKey: 'protein',
-        numeric: true,
-    },
+    { width: 50, label: 'POS', dataKey: 'POS', numeric: true },
+    { width: 200, label: 'CLUB', dataKey: 'CLUB' },
+    { width: 50, label: 'P', dataKey: 'P', numeric: true },
+    { width: 50, label: 'W', dataKey: 'W', numeric: true },
+    { width: 50, label: 'D', dataKey: 'D', numeric: true },
+    { width: 50, label: 'L', dataKey: 'L', numeric: true },
+    { width: 50, label: 'GF', dataKey: 'GF', numeric: true },
+    { width: 50, label: 'GA', dataKey: 'GA', numeric: true },
+    { width: 50, label: 'GD', dataKey: 'GD' },
+    { width: 50, label: 'PTS', dataKey: 'PTS', numeric: true },
 ];
-
-const rows: Data[] = Array.from({ length: 200 }, (_, index) => {
-    const randomSelection = sample[Math.floor(Math.random() * sample.length)];
-    return createData(index, ...randomSelection);
-});
 
 const VirtuosoTableComponents: TableComponents<Data> = {
     Scroller: React.forwardRef<HTMLDivElement>((props, ref) => (
@@ -107,9 +82,7 @@ function fixedHeaderContent() {
                     variant="head"
                     align={column.numeric || false ? 'right' : 'left'}
                     style={{ width: column.width }}
-                    sx={{
-                        backgroundColor: 'background.paper',
-                    }}
+                    sx={{ backgroundColor: 'background.paper' }}
                 >
                     {column.label}
                 </TableCell>
@@ -134,6 +107,23 @@ function rowContent(_index: number, row: Data) {
 }
 
 export default function ReactVirtualizedTable() {
+    const [value, loading, error] = useCollection(
+        query(collection(db, '2022C'), orderBy('POS')),
+        {
+            snapshotListenOptions: { includeMetadataChanges: true },
+        }
+    );
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error.message}</div>;
+    }
+
+    const rows: Data[] = value?.docs.map(doc => doc.data() as Data) || [];
+
     return (
         <Paper style={{ height: 400, width: '100%' }}>
             <TableVirtuoso
