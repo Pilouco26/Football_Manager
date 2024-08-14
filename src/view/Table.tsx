@@ -6,10 +6,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { TableVirtuoso, TableComponents } from 'react-virtuoso';
-import { useCollection } from 'react-firebase-hooks/firestore';
-import { getFirestore, collection, query, orderBy } from 'firebase/firestore';
-import { initializeApp } from 'firebase/app';
+import {TableVirtuoso, TableComponents} from 'react-virtuoso';
+import {useCollection} from 'react-firebase-hooks/firestore';
+import {getFirestore, collection, query, orderBy} from 'firebase/firestore';
+import {initializeApp} from 'firebase/app';
+import '../App.css';
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyAUa8ASqRSE4H43_o2QfZtnArjHDVIrJJE",
@@ -45,31 +47,31 @@ interface ColumnData {
 }
 
 const columns: ColumnData[] = [
-    { width: 50, label: 'POS', dataKey: 'POS', numeric: true },
-    { width: 200, label: 'CLUB', dataKey: 'CLUB' },
-    { width: 50, label: 'P', dataKey: 'P', numeric: true },
-    { width: 50, label: 'W', dataKey: 'W', numeric: true },
-    { width: 50, label: 'D', dataKey: 'D', numeric: true },
-    { width: 50, label: 'L', dataKey: 'L', numeric: true },
-    { width: 50, label: 'GF', dataKey: 'GF', numeric: true },
-    { width: 50, label: 'GA', dataKey: 'GA', numeric: true },
-    { width: 50, label: 'GD', dataKey: 'GD' },
-    { width: 50, label: 'PTS', dataKey: 'PTS', numeric: true },
+    {width: 50, label: 'POS', dataKey: 'POS', numeric: true},
+    {width: 200, label: 'CLUB', dataKey: 'CLUB'},
+    {width: 50, label: 'P', dataKey: 'P', numeric: true},
+    {width: 50, label: 'W', dataKey: 'W', numeric: true},
+    {width: 50, label: 'D', dataKey: 'D', numeric: true},
+    {width: 50, label: 'L', dataKey: 'L', numeric: true},
+    {width: 50, label: 'GF', dataKey: 'GF', numeric: true},
+    {width: 50, label: 'GA', dataKey: 'GA', numeric: true},
+    {width: 50, label: 'GD', dataKey: 'GD'},
+    {width: 50, label: 'PTS', dataKey: 'PTS', numeric: true},
 ];
 
 const VirtuosoTableComponents: TableComponents<Data> = {
     Scroller: React.forwardRef<HTMLDivElement>((props, ref) => (
-        <TableContainer component={Paper} {...props} ref={ref} />
+        <TableContainer component={Paper} {...props} ref={ref}/>
     )),
     Table: (props) => (
-        <Table {...props} sx={{ borderCollapse: 'separate', tableLayout: 'fixed' }} />
+        <Table {...props} sx={{borderCollapse: 'separate', tableLayout: 'fixed'}}/>
     ),
     TableHead: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
-        <TableHead {...props} ref={ref} />
+        <TableHead {...props} ref={ref}/>
     )),
     TableRow,
     TableBody: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
-        <TableBody {...props} ref={ref} />
+        <TableBody {...props} ref={ref}/>
     )),
 };
 
@@ -81,8 +83,8 @@ function fixedHeaderContent() {
                     key={column.dataKey}
                     variant="head"
                     align={column.numeric || false ? 'right' : 'left'}
-                    style={{ width: column.width }}
-                    sx={{ backgroundColor: 'background.paper' }}
+                    style={{width: column.width}}
+                    sx={{backgroundColor: 'background.paper'}}
                 >
                     {column.label}
                 </TableCell>
@@ -92,12 +94,36 @@ function fixedHeaderContent() {
 }
 
 function rowContent(_index: number, row: Data) {
+    const getBackgroundColor = () => {
+        if (row.POS === 1) {
+            return 'gold';
+        } else if (row.POS >= 2 && row.POS <= 5) {
+            return '#447aaa';
+        } else if (row.POS > 10) {
+            return 'red';
+        }
+        return 'inherit'; // Default background color
+    };
+
+    const getTextStyle = (backgroundColor: string) => {
+        if (backgroundColor !== 'inherit' && backgroundColor !== 'gold') {
+            return {color: 'white', fontFamily: 'ChampionsBold'};
+        } else {
+            return {color: 'black', fontFamily: 'ChampionsBold'};
+        }
+    };
+
+    const backgroundColor = getBackgroundColor();
+
     return (
         <React.Fragment>
             {columns.map((column) => (
                 <TableCell
                     key={column.dataKey}
                     align={column.numeric || false ? 'right' : 'left'}
+                    style={{
+                        backgroundColor, ...getTextStyle(backgroundColor), fontFamily: 'ChampionsBold'
+                    }}
                 >
                     {row[column.dataKey]}
                 </TableCell>
@@ -106,13 +132,23 @@ function rowContent(_index: number, row: Data) {
     );
 }
 
-export default function ReactVirtualizedTable() {
+
+function useData(year: string) {
     const [value, loading, error] = useCollection(
-        query(collection(db, '2022C'), orderBy('POS')),
+        query(collection(db, year), orderBy('POS')),
         {
-            snapshotListenOptions: { includeMetadataChanges: true },
+            snapshotListenOptions: {includeMetadataChanges: true},
         }
     );
+    return {value, loading, error};
+}
+
+export interface DataProps {
+    year: string;
+}
+
+export default function ReactVirtualizedTable({year}: DataProps) {
+    const {value, loading, error} = useData(year);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -125,7 +161,7 @@ export default function ReactVirtualizedTable() {
     const rows: Data[] = value?.docs.map(doc => doc.data() as Data) || [];
 
     return (
-        <Paper style={{ height: 400, width: '100%' }}>
+        <Paper style={{height: '90vh', width: '100%'}}>
             <TableVirtuoso
                 data={rows}
                 components={VirtuosoTableComponents}

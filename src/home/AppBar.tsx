@@ -13,6 +13,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import {useNavigate} from 'react-router-dom';
+import '../App.css';
+
 
 const pages = ['2022', '2023', '2024', '2025', '2026'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -47,7 +49,7 @@ function ResponsiveAppBar() {
                         variant="h6"
                         noWrap
                         component="a"
-                        href="#app-bar-with-responsive-menu"
+                        href="/"
                         sx={{
                             mr: 2,
                             display: {xs: 'none', md: 'flex'},
@@ -86,13 +88,14 @@ function ResponsiveAppBar() {
                             }}
                             open={Boolean(anchorElNav)}
                             onClose={() => setAnchorElNav(null)} // Close the menu
+
                             sx={{
                                 display: {xs: 'block', md: 'none'},
                             }}
                         >
                             {pages.map((page) => (
-                                <MenuItem key={page} onClick={() => handleCloseNavMenu('/' + page)}>
-                                    <Typography textAlign="center">{page}</Typography>
+                                <MenuItem key={page}  onClick={() => handleCloseNavMenu('/' + page)}>
+                                    <Typography textAlign="center" style={{ fontFamily: 'ChampionsBold' }} >{page}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -121,7 +124,7 @@ function ResponsiveAppBar() {
                             <Button
                                 key={page}
                                 onClick={() => handleCloseNavMenu('/' + page)}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
+                                sx={{my: 2, color: 'white', display: 'block'}}
                             >
                                 {page}
                             </Button>

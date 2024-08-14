@@ -10,14 +10,8 @@ export default function SimpleContainer() {
             <Container maxWidth="sm">
                 <Box
                     component="img"
-                    src="https://vemaps.com/uploads/img/big/dk-03.jpg"
+                    src="https://www.infobae.com/new-resizer/ZAlhD43Ox6hyAun0dXBzh3c1-Jk=/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/JAXUMTHU5BEA5CYPZZKJF2DPYM.jpg"
                     alt="Map"
-                    sx={{
-                        width: '100%',  // Make the image fit the container
-                        height: 'auto', // Maintain the aspect ratio
-                        borderRadius: '8px', // Optional: Add some border radius
-                        boxShadow: 3 // Optional: Add a shadow for some depth
-                    }}
                 />
             </Container>
         </React.Fragment>

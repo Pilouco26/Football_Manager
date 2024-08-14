@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import SimpleContainer from "./Container";
 import AppBar from "@mui/material/AppBar";
 import ResponsiveAppBar from "./AppBar";
+import CoachView from "../coach/CoachView";
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -43,26 +44,22 @@ export default function Home() {
     };
 
     return (
-        <Box sx={{width: '100%'}}>
-            <ResponsiveAppBar></ResponsiveAppBar>
-            <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label="Item One" {...a11yProps(0)} />
-                    <Tab label="Item Two" {...a11yProps(1)} />
-                    <Tab label="Item Three" {...a11yProps(2)} />
-                </Tabs>
-            </Box>
-            <CustomTabPanel value={value} index={0}>
-                Item One
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={1}>
-                Item Two
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={2}>
-                Item Three
-            </CustomTabPanel>
-            <SimpleContainer></SimpleContainer>
-        </Box>
+        <Box sx={{width: '100%', height: '100vh', display: 'flex', flexDirection: 'column'}}>
+            <ResponsiveAppBar />
+            {/*<Box sx={{flex: 1}}>*/}
+            {/*    <Box*/}
+            {/*        component="img"*/}
+            {/*        src="https://www.infobae.com/new-resizer/ZAlhD43Ox6hyAun0dXBzh3c1-Jk=/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/JAXUMTHU5BEA5CYPZZKJF2DPYM.jpg"*/}
+            {/*        alt="Map"*/}
+            {/*        sx={{*/}
+            {/*            width: '100%',*/}
+            {/*            height: '100%',*/}
+            {/*            objectFit: 'cover'*/}
+            {/*        }}*/}
+            {/*    />*/}
 
+            {/*</Box>*/}
+            <CoachView></CoachView>
+        </Box>
     );
 }

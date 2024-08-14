@@ -1,5 +1,6 @@
-import { initializeApp } from 'firebase/app';
-import { collection, addDoc, deleteDoc, getDocs, getFirestore } from 'firebase/firestore';
+import {initializeApp} from 'firebase/app';
+import {collection, addDoc, deleteDoc, getDocs, getFirestore} from 'firebase/firestore';
+
 const firebaseConfig = {
     apiKey: "AIzaSyAUa8ASqRSE4H43_o2QfZtnArjHDVIrJJE",
     authDomain: "football-63302.firebaseapp.com",
@@ -376,7 +377,7 @@ const leagueData2026 = [
         "PTS": 40
     }
 ]
-const leagueDataSub2022 =[
+const leagueDataSub2022 = [
     {
         "POS": 7,
         "CLUB": "FC Nordsjælland",
@@ -753,11 +754,39 @@ const leagueDataSub2026 = [
 ]
 
 export async function addLeagueData() {
-    const collectionRef = collection(db, '2022C');
+    const collectionRef = collection(db, '2022');
+    const collectionRef3 = collection(db, '2023');
+    const collectionRef4 = collection(db, '2024');
+    const collectionRef5 = collection(db, '2025');
+    const collectionRef6 = collection(db, '2026');
     const querySnapshot = await getDocs(collectionRef);
+    const querySnapshot2 = await getDocs(collectionRef3);
+    const querySnapshot3 = await getDocs(collectionRef4);
+    const querySnapshot4 = await getDocs(collectionRef5);
+    const querySnapshot5 = await getDocs(collectionRef6);
 
     if (!querySnapshot.empty) {
         querySnapshot.forEach(async (doc) => {
+            await deleteDoc(doc.ref);
+        });
+    }
+    if (!querySnapshot2.empty) {
+        querySnapshot2.forEach(async (doc) => {
+            await deleteDoc(doc.ref);
+        });
+    }
+    if (!querySnapshot3.empty) {
+        querySnapshot3.forEach(async (doc) => {
+            await deleteDoc(doc.ref);
+        });
+    }
+    if (!querySnapshot4.empty) {
+        querySnapshot4.forEach(async (doc) => {
+            await deleteDoc(doc.ref);
+        });
+    }
+    if (!querySnapshot5.empty) {
+        querySnapshot5.forEach(async (doc) => {
             await deleteDoc(doc.ref);
         });
     }
@@ -767,6 +796,30 @@ export async function addLeagueData() {
     }
     for (const team of leagueDataSub2022) {
         await addDoc(collectionRef, team);
+    }
+    for (const team of leagueData2023) {
+        await addDoc(collectionRef3, team);
+    }
+    for (const team of leagueDataSub2023) {
+        await addDoc(collectionRef3, team);
+    }
+    for (const team of leagueData2024) {
+        await addDoc(collectionRef4, team);
+    }
+    for (const team of leagueDataSub2024) {
+        await addDoc(collectionRef4, team);
+    }
+    for (const team of leagueData2025) {
+        await addDoc(collectionRef5, team);
+    }
+    for (const team of leagueDataSub2025) {
+        await addDoc(collectionRef5, team);
+    }
+    for (const team of leagueData2026) {
+        await addDoc(collectionRef6, team);
+    }
+    for (const team of leagueDataSub2026) {
+        await addDoc(collectionRef6, team);
     }
 
     console.log('Data added successfully');

@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+@font-face {
+  font-family: 'ChampionsBold' ;
+  src: url('../public/fonts/Champions-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}

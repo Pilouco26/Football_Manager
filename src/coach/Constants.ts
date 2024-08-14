@@ -1,0 +1,2 @@
+export const championsLeagueImage = "https://upload.wikimedia.org/wikipedia/commons/b/b1/UEFA_-_Champions_League.png"
+export const laLigaImage= "https://upload.wikimedia.org/wikipedia/commons/b/b1/UEFA_-_Champions_League.png"

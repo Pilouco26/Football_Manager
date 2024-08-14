@@ -2,11 +2,12 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './home/home';
 import ReactVirtualizedTable from "./view/Table";
-import TwoThousandTwentyTwo from "./view/2022";
+import TwoThousandTwentyTwo from "./view/Standings";
 import { getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { addLeagueData } from "./database/data";
+import TwoThousandTwenty from "./view/Standings";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAUa8ASqRSE4H43_o2QfZtnArjHDVIrJJE",
@@ -27,10 +28,13 @@ function App() {
         <Router>
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/table" element={<ReactVirtualizedTable />} />
-                <Route path="/2022" element={<TwoThousandTwentyTwo />} />
+                <Route path="/2022" element={<TwoThousandTwenty year={"2022"} />} />
+                <Route path="/2023" element={<TwoThousandTwenty year={"2023"} />} />
+                <Route path="/2024" element={<TwoThousandTwenty year={"2024"} />} />
+                <Route path="/2025" element={<TwoThousandTwenty year={"2025"} />} />
+                <Route path="/2026" element={<TwoThousandTwenty year={"2026"} />} />
             </Routes>
-            <button onClick={() => addLeagueData()}>Add League Data</button>
+            {/*<button onClick={() => addLeagueData()}>Add League Data</button>*/}
         </Router>
     );
 }
